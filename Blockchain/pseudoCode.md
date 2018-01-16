@@ -1,13 +1,14 @@
 AmadBlock Pseudo Code
 ----------------------
 
-
 Code de noeud
-----
+---
 
+
+0. INIT
+---
 - Installation Client/Serveur sur le noeud
 	* Flask *
-
 
 1. LIEN CLIENT (Automatiser)
 ---
@@ -25,12 +26,6 @@ Code de noeud
 	- Mise en Mempool des nouvelles transactions
 
 
-
-
-------------
-
-
-
 3. MINING (Alternatives)
 ---
 - Preuve de travail (mining)
@@ -40,18 +35,14 @@ Code de noeud
 	- Emission d'ue requête de consensus
 
 
-
 4. CONSENSUS (Alternatives)
 ---
-	- Vérification de l'intégrité de la Blockchain
-	- Vérification de la preuve de travail
-	- Calcul de longueur
-	- Choix de la bonne blockchain
+- Vérification de l'intégrité de la Blockchain
+- Vérification de la preuve de travail
+- Calcul de longueur
+- Choix de la bonne blockchain
 - Mise à jour
 	- Diffusion et recopie de la Blockchain qui fait autorité
-
-
-
 
 
 
