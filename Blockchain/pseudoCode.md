@@ -1,10 +1,6 @@
 AmadBlock Pseudo Code
 ----------------------
 
-Code de noeud
----
-
-
 0. INIT
 ---
 - Installation Client/Serveur sur le noeud
