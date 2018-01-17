@@ -1,4 +1,4 @@
-Blockchain Group Master Folder
+Blockchain Group Folder
 
 Members
 ---------
