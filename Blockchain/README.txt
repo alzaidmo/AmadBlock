@@ -1,4 +1,5 @@
 Blockchain Group XperiMENTAL Folder
+/!\ Unstable version /!\
 
 Members
 ---------
