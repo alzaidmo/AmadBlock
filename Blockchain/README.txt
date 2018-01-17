@@ -1,4 +1,4 @@
-Blockchain Group Folder
+Blockchain Group XperiMENTAL Folder
 
 Members
 ---------
