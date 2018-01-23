@@ -2,6 +2,7 @@ AmadBlock Pseudo Code
 ----------------------
 
 Ini mempool
+
 Ini liste noeuds
 
 
@@ -19,8 +20,8 @@ THREAD Serveur
 - Recieve Request
 - Identify "Web Request"
 - Parse Request
-	- Récupération du fichier .json
-- Create "ObjetPython" from json data
+	- Récupération du fichier .xml
+- Create "ObjetPython" from xml data
 	- Extract data
 	- Assignation aux attributs 
 - Mise en Mempool de l'objet
@@ -44,7 +45,7 @@ THREAD Mineur/Consensus
 ---
 3. MINING (Alternatives)
 ---
-- Preuve de travail (mining)
+- Preuve de travail (mining - en continu)
 	- Création d'un bloc de transactions
 	- Calcul d'une preuve de travail avec la preuve de travail du bloc précédent
 	- Ajout du bloc à la Blockchain locale
