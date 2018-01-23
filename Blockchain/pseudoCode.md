@@ -1,27 +1,47 @@
 AmadBlock Pseudo Code
 ----------------------
 
+Ini mempool
+Ini liste noeuds
+
+
+THREAD Serveur
+---
 0. INIT
 ---
-- Installation Client/Serveur sur le noeud
-	* Flask *
+- Choix du port
+- Démarrage du serveur sur le noeud
+- Broadcast Request "Nouveau Noeud"
+- Listening
 
-1. LIEN CLIENT (Automatiser)
+1. LIEN CLIENT WEB (Automatiser)
 ---
-- Communicatin avec le client continue
-- Mise en Mempool des transactions arrivantes
-
+- Recieve Request
+- Identify "Web Request"
+- Parse Request
+	- Récupération du fichier .json
+- Create "ObjetPython" from json data
+	- Extract data
+	- Assignation aux attributs 
+- Mise en Mempool de l'objet
+- Broadcast Request "MaJMempool"
+- Listen
 
 2. LIEN NOEUDS (Automatiser)
 ---
-- Echanges entre noeuds (HTTP/TCP)
-	- mise à jour de l'état du réseau
-		- liste des noeuds directement connectés
-	- diffusion des transactions arrivantes aux voisins directs
-	- réception des transactions arrivantes ( ! doublons)
-	- Mise en Mempool des nouvelles transactions
+- Receive Request
+- Identify "Node Request"
+- Si "Nouveau noeud"
+	- Ajouter IP noeud entrant à sa liste de noeud
+- Si "Consensus"
+	- Goto Consensus (Pipe vers Thread Mineur/Consensus) 
+- Si "MaJMempool"
+	- Si "ObjetPython" not in Mempool
+		- Ajout "ObjetPython" à la Mempool
 
 
+THREAD Mineur/Consensus
+---
 3. MINING (Alternatives)
 ---
 - Preuve de travail (mining)
@@ -45,4 +65,17 @@ AmadBlock Pseudo Code
 CONTRAINTES
 ---
 - Même code sur tous les noeuds
-- Interconnexion des noeuds sans noeud central
+- Interconnexion des noeuds sans noeud central (Réseau local)
+- Le client web envoie des données à 1 seul noeud, c'est ce dernier qui relaie.
+
+
+Configuration de TEST
+---
+Thread 1/
+- Connecter plusieurs machines sur un réseau local (192.168...)
+- Lancer le serveur sur chacunes d'elles
+- Constater la découverte des machines entre-elles
+- Simuler l'arrivée d'une requête Web
+- Constater l'ajout des infos au Mempool
+
+Thread 2/
