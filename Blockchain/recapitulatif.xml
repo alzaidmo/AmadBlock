@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF_8"?>
+<recapitulatif>
+  <personne>
+    <nom>Hidderley</nom>
+    <prenom>Quentin</prenom>
+    <reservation>
+      <Compagnie>Air France</Compagnie>
+      <Depart>Paris Charles de Gaulle</Depart>
+      <Arrivee>Douala International</Arrivee>
+    </reservation>
+    <telephone type="fixe">+33643582284</telephone>
+  </personne>
+</recapitulatif>

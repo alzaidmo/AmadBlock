@@ -2,6 +2,7 @@ AmadBlock Pseudo Code
 ----------------------
 
 Ini mempool
+
 Ini liste noeuds
 
 
@@ -9,30 +10,30 @@ THREAD Serveur
 ---
 0. INIT
 ---
-- Choix du port
-- Démarrage du serveur sur le noeud
+- Choix du port [OK]
+- Démarrage du serveur sur le noeud [OK]
 - Broadcast Request "Nouveau Noeud"
-- Listening
+- Listening [OK]
 
 1. LIEN CLIENT WEB (Automatiser)
 ---
-- Recieve Request
-- Identify "Web Request"
+- Recieve Request [OK]
+- Identify "Web Request" 
 - Parse Request
-	- Récupération du fichier .json
-- Create "ObjetPython" from json data
+	- Récupération du fichier .xml
+- Create "ObjetPython" from xml data
 	- Extract data
 	- Assignation aux attributs 
 - Mise en Mempool de l'objet
 - Broadcast Request "MaJMempool"
-- Listen
+- Listen [OK]
 
 2. LIEN NOEUDS (Automatiser)
 ---
-- Receive Request
-- Identify "Node Request"
+- Receive Request [OK]
+- Identify "Node Request" [OK]
 - Si "Nouveau noeud"
-	- Ajouter IP noeud entrant à sa liste de noeud
+	- Ajouter IP noeud entrant à sa liste de noeud [OK]
 - Si "Consensus"
 	- Goto Consensus (Pipe vers Thread Mineur/Consensus) 
 - Si "MaJMempool"
@@ -44,7 +45,7 @@ THREAD Mineur/Consensus
 ---
 3. MINING (Alternatives)
 ---
-- Preuve de travail (mining)
+- Preuve de travail (mining - en continu)
 	- Création d'un bloc de transactions
 	- Calcul d'une preuve de travail avec la preuve de travail du bloc précédent
 	- Ajout du bloc à la Blockchain locale
