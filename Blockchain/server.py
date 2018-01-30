@@ -14,7 +14,6 @@ def startNode():
 
 	'''Init Listening Socket'''
 	SKL = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	SKL.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	SKL.bind((IPServ, PortServ))
 	SKL.listen(QueuedCo)
 
