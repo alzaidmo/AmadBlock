@@ -21,18 +21,19 @@ class ServThread(threading.Thread):
 
 class ClientThread(threading.Thread):
 	"""Server type thread"""
-	def __init__(self, name, nodePort):
+	def __init__(self, name, destIP, destPort):
 		super(ClientThread, self).__init__()
 		self.name = name
-		self.nodePort = nodePort
+		self.destPort = destPort
+		self.destIP = destIP
 
 	def run(self):
 		print("Starting " + self.name)
 		myClient = Client.Client()
-		myClient.comToNode('127.0.0.1', self.nodePort, myClient.newReq)
-		myClient.comToNode('127.0.0.1', self.nodePort, myClient.consReq)
-		myClient.comToNode('127.0.0.1', self.nodePort, myClient.memReq)
-		myClient.comToNode('127.0.0.1', self.nodePort, myClient.shutNode)
+		myClient.comToNode(self.destIP, self.destPort, myClient.newReq)
+		myClient.comToNode(self.destIP, self.destPort, myClient.consReq)
+		myClient.comToNode(self.destIP, self.destPort, myClient.memReq)
+		myClient.comToNode(self.destIP, self.destPort, myClient.shutNode)
 
 
 if __name__ == "__main__":
@@ -40,22 +41,14 @@ if __name__ == "__main__":
 	#Creating threads
 
 	Server1 = ServThread("Server-1", 4242)
-	Server2 = ServThread("Server-2", 4343)
-
-	Client1 = ClientThread("Client-1", 4343)
-	Client2 = ClientThread("Client-2", 4242)
+	Client1 = ClientThread("Client-1", "127.0.0.1", 4242)
 
 	#Launching threads
 
 	Server1.start()
-	Server2.start()
 	Client1.start()
-	Client2.start()
-
 
 	Server1.join()
-	Server2.join()
 	Client1.join()
-	Client2.join()
 
 	print("End of Node program")

@@ -39,13 +39,3 @@ class Client(object):
 	def shutNode(self):
 		print("Shutting down the other node")
 		self.SK.send(str.encode("NODE SHUTDOWN"))
-
-
-
-if __name__ == "__main__":
-
-	myClient = Client()
-	myClient.comToNode('127.0.0.1', 4242, myClient.newReq)
-	myClient.comToNode('127.0.0.1', 4242, myClient.consReq)
-	myClient.comToNode('127.0.0.1', 4242, myClient.memReq)
-	myClient.comToNode('127.0.0.1', 4242, myClient.shutNode)
