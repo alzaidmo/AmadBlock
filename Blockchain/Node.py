@@ -10,7 +10,7 @@ class Node(object):
 		self.name = name
 		self.port = port
 		self.mempool = []
-		self.blockchain = []
+		self.blockchain = ["Hello", "Amadeus rocks!"]
 		self.server = ServerThread.ServerThread(self.name, self.port, self)
 		self.client = 0
 	

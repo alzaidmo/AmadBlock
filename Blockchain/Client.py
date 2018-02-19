@@ -1,7 +1,11 @@
 # coding=utf-8
 
 import socket
+import pickle
 import sys
+
+MAG = "\u001b[35;1m"
+RST = "\u001b[0m"
 
 class Client(object):
 	"""Client part of the node responsible for sending inter-node requests"""
@@ -13,40 +17,76 @@ class Client(object):
 		'''Connects to Node at nodeIP on port nodePort'''
 		self.SK = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.SK.connect((nodeIP, nodePort))
-		print("[Client] Connection suscessfully established with %s" %(nodeIP))
+		print("["+MAG+"Client"+RST+"] Connection successfully established with %s" %(nodeIP))
+
 
 	def endCon(self):
 		'''Signals end of communication with distant host'''
 		self.SK.shutdown(socket.SHUT_WR)
 		self.SK.close()
-		print("[Client] Ended communication client side")
+		print("["+MAG+"Client"+RST+"] Ended communication client side\n")
 
 	def newReq(self):
 		'''Declares self as a new node entering the network'''
-		print("Making 1st contact")
+		print("["+MAG+"Client"+RST+"] Making 1st contact")
 		self.SK.send(str.encode("NODE NEW")) #New node declaration
-		print("[Client] Signaled self")
+		response = self.SK.recv(1)
+		if response == b'1':
+			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})\n".format(response.decode("utf-8")))
+		else:
+			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})\n".format(response.decode("utf-8")))
 
 	def consReq(self):
 		'''Signals an onging consensus to other nodes'''
-		print("Asking for consensus")	
+		print("["+MAG+"Client"+RST+"] Asking for consensus")	
 		self.SK.send(str.encode("NODE CONSENSUS")) #Consensus request
-		print("[Client] Signaled consensus")
+		response = self.SK.recv(1)
+		if response == b'1':
+			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})\n".format(response.decode("utf-8")))
+		else:
+			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})\n".format(response.decode("utf-8")))
 
 	def memReq(self):
 		'''Shares a new transaction with the other nodes'''
-		print("Offering mempool update")
+		print("["+MAG+"Client"+RST+"] Offering mempool update")
 		self.SK.send(str.encode("NODE MEMUP")) #Mempool update request
 		#SK.send(str.encode("PyObject0"))
-		print("[Client] Shared new transaction")
+		print("["+MAG+"Client"+RST+"] Shared new transaction")
+		response = self.SK.recv(1)
+		if response == b'1':
+			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})\n".format(response.decode("utf-8")))
+		else:
+			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})\n".format(response.decode("utf-8")))
 
 	def getBC(self):
 		'''Gets Blockchain from distant host'''
-		self.SK.send("NODE BLOCKCHAIN")
-		print("Asking for Blockchain")
+		self.SK.send(str.encode("NODE BLOCKCHAIN"))
+		print("["+MAG+"Client"+RST+"] Asking for Blockchain")
+		
+		response = self.SK.recv(1)
+		data = b''
+		while response :
+			data += response
+			response = self.SK.recv(1)
+	
+		chain = pickle.loads(data)
+		print("["+MAG+"Client"+RST+"] End of stream, received {}\n".format(chain))
+
+		
+		'''
+		if response == b'1':
+			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})".format(response.decode("utf-8")))
+		else:
+			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})".format(response.decode("utf-8")))
+		'''
 
 	def shutNode(self):
 		'''[DEBUG ONLY] Shuts distant host server down'''
-		print("Shutting down the other node")
+		print("["+MAG+"Client"+RST+"] Shutting down distant host")
 		self.SK.send(str.encode("NODE SHUTDOWN"))
-		print("[Client] Distant node shut down")
+		response = self.SK.recv(1)
+		if response == b'1':
+			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})".format(response.decode("utf-8")))
+		else:
+			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})".format(response.decode("utf-8")))
+		print("["+MAG+"Client"+RST+"] Distant node shut down\n")

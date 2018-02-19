@@ -4,9 +4,13 @@ import Node
 
 if __name__ == "__main__":
 	
-	myNode = Node.Node("Support", 4243)
+	myNode = Node.Node("Secondary Node", 4243)
 	myNode.bootNode()
 
 	myNode.startClient()
+	myNode.client.conToNode("localhost", 4242)
+	myNode.client.newReq()
+	myNode.client.conToNode("localhost", 4242)
+	myNode.client.getBC()
 	myNode.client.conToNode("localhost", 4242)
 	myNode.client.shutNode()

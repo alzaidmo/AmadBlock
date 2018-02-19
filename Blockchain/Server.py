@@ -1,7 +1,11 @@
 # coding=utf-8
 
 import socket
+import pickle
 import sys
+
+BLU = "\u001b[34;1m"
+RST = "\u001b[0m"
 
 class Server(object):
 	"""Server object of a node"""
@@ -25,70 +29,80 @@ class Server(object):
 		self.SKL.bind((self.IfServ, self.PortServ))
 		self.SKL.listen(self.Queue)
 
-		print("[Server] Node initialized, listening on port %d" %(self.PortServ))
+		print("["+BLU+"Server"+RST+"] Node initialized, listening on port %d" %(self.PortServ))
 
 
 	def treatReq(self):
 		'''Start a service for incoming connections on listenSock'''
 		while (True):
-			print("[Server] Waiting for incoming connection...")
+			print("["+BLU+"Server"+RST+"] Waiting for incoming connection...\n")
 			(SKS, Add) = self.SKL.accept()
-			
+
 			data = bytes.decode(SKS.recv(self.BuffSize))
 			typeReq, Req = data.split(' ')[0], data.split(' ')[1] #Splitting request
 
 			if ((Add[0] not in self.Hosts) & (Req != "NEW")):
-				print("[Server] Unkown host attempting to connect - Refusing")
-				SKS.send(str.encode("Unknown host, please send NODE NEW request first"))  #Refusing unknown hosts
+				print("["+BLU+"Server"+RST+"] Unkown host attempting to connect - Refusing\n")
+				SKS.send(b'0')  #Refusing unknown hosts
 
 			else:
-				print("[Server] Connection established with %s on port %d" %(Add[0], Add[1]))
+				print("["+BLU+"Server"+RST+"] Connection established with %s on port %d" %(Add[0], Add[1]))
 
 				if typeReq == "NODE":
 					if Req == "NEW":
 						self.addNode(Add)
+						SKS.send(b'1') # Confirm successfull treatment of the request					
 					elif Req == "CONSENSUS":
 						self.consent()
+						SKS.send(b'1')
 					elif Req == "UPMEM":
 						self.updateMem()
+						SKS.send(b'1')
 					elif Req == "BLOCKCHAIN":
-						self.sendBC()
+						self.sendBC(SKS)
 					elif Req == "SHUTDOWN":
-						self.shutNode()
+						self.shutNode(SKS)
 
 				if typeReq == "WEB":
 					print("Web Request")
 			
 			SKS.shutdown(socket.SHUT_RDWR)
 			SKS.close()
-			print("[Server] Succesfully processed request from %s" %(Add[0]))
+			print("["+BLU+"Server"+RST+"] Succesfully processed {} request from {}\n".format(Req, Add[0]))
 
 
 
 	def addNode(self, Add):
 		'''Add an incoming node to the list of trusted hosts'''
-		print("New node reaching out...")
+		print("["+BLU+"Server"+RST+"] New node reaching out...")
 		self.Hosts.add(Add[0])
-		print(self.Hosts)
+		print("["+BLU+"Server"+RST+"] Added distant host to known hosts: {}".format(self.Hosts))
 
 	
 	def consent(self):
 		'''Trigger consesus'''
-		print("Consensus signaled by distant host")
+		print("["+BLU+"Server"+RST+"] Consensus signaled by distant host")
 
 
 	def updateMem(self):
 		'''Update Mempool of current node'''
-		print("New transaction shared by distant host")
+		print("["+BLU+"Server"+RST+"] New transaction shared by distant host")
 
-	def sendBC(self):
+	def sendBC(self, SKS):
 		'''Send node's BC to distant host'''
-		print("Sending our BC to distant host")
+		print("["+BLU+"Server"+RST+"] Sending our BC to distant host")
+		chain_b = pickle.dumps(self.node.blockchain)
+		SKS.send(chain_b)
+		print("["+BLU+"Server"+RST+"] BC sent")
 
-	def shutNode(self):
+
+	def shutNode(self, SKS):
 		'''Shuts the current node'''
-		print("Distant host shutting down node...")
+		print("["+BLU+"Server"+RST+"] Distant host shutting down node...")
+		SKS.send(b'1')
+		SKS.shutdown(socket.SHUT_RDWR)
+		SKS.close()
 		self.SKL.shutdown(socket.SHUT_RDWR)
 		self.SKL.close()
-		print("[Server] Node shut down")
+		print("["+BLU+"Server"+RST+"] Node shut down\n")
 		sys.exit()
