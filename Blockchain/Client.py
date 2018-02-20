@@ -46,17 +46,19 @@ class Client(object):
 		else:
 			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})\n".format(response.decode("utf-8")))
 
-	def memReq(self):
+	def memReq(self, transaction):
 		'''Shares a new transaction with the other nodes'''
 		print("["+MAG+"Client"+RST+"] Offering mempool update")
-		self.SK.send(str.encode("NODE MEMUP")) #Mempool update request
-		#SK.send(str.encode("PyObject0"))
-		print("["+MAG+"Client"+RST+"] Shared new transaction")
+		self.SK.send(str.encode("NODE UPMEM")) #Mempool update request
 		response = self.SK.recv(1)
 		if response == b'1':
-			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})\n".format(response.decode("utf-8")))
+			print("["+MAG+"Client"+RST+"] Server interpreted request successfully ({})".format(response.decode("utf-8")))
+			transaction_b = pickle.dumps(transaction)
+			self.SK.send(transaction_b)
+			print("["+MAG+"Client"+RST+"] Shared new transaction {}\n".format(transaction))
 		else:
-			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})\n".format(response.decode("utf-8")))
+			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})\n".format(response.decode("utf-8")))		
+
 
 	def getBC(self):
 		'''Gets Blockchain from distant host'''

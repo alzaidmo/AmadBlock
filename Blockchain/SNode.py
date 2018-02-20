@@ -13,4 +13,6 @@ if __name__ == "__main__":
 	myNode.client.conToNode("localhost", 4242)
 	myNode.client.getBC()
 	myNode.client.conToNode("localhost", 4242)
+	myNode.client.memReq("CDG <-> MNL")
+	myNode.client.conToNode("localhost", 4242)
 	myNode.client.shutNode()

@@ -9,10 +9,12 @@ class Node(object):
 		super(Node, self).__init__()
 		self.name = name
 		self.port = port
-		self.mempool = []
+		self.mempool = set([])
 		self.blockchain = ["Hello", "Amadeus rocks!"]
 		self.server = ServerThread.ServerThread(self.name, self.port, self)
 		self.client = 0
+		self.miner = 0
+		self.consenter = 0
 	
 	def bootNode(self):
 		self.server.start()

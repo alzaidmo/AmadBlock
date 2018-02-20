@@ -56,8 +56,8 @@ class Server(object):
 						self.consent()
 						SKS.send(b'1')
 					elif Req == "UPMEM":
-						self.updateMem()
 						SKS.send(b'1')
+						self.updateMem(SKS)
 					elif Req == "BLOCKCHAIN":
 						self.sendBC(SKS)
 					elif Req == "SHUTDOWN":
@@ -82,11 +82,22 @@ class Server(object):
 	def consent(self):
 		'''Trigger consesus'''
 		print("["+BLU+"Server"+RST+"] Consensus signaled by distant host")
+		#self.node.consenter.consent()
 
 
-	def updateMem(self):
+	def updateMem(self, SKS):
 		'''Update Mempool of current node'''
 		print("["+BLU+"Server"+RST+"] New transaction shared by distant host")
+		data = SKS.recv(1)
+		transaction= b''
+		while data:
+			transaction += data
+			data = SKS.recv(1)
+
+		transaction = pickle.loads(transaction)
+		self.node.mempool.add(transaction)
+		print("["+BLU+"Server"+RST+"] Updated Mempool: {}".format(self.node.mempool))
+
 
 	def sendBC(self, SKS):
 		'''Send node's BC to distant host'''
