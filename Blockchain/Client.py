@@ -19,13 +19,6 @@ class Client(object):
 		self.SK.connect((nodeIP, nodePort))
 		print("["+MAG+"Client"+RST+"] Connection successfully established with %s" %(nodeIP))
 
-
-	def endCon(self):
-		'''Signals end of communication with distant host'''
-		self.SK.shutdown(socket.SHUT_WR)
-		self.SK.close()
-		print("["+MAG+"Client"+RST+"] Ended communication client side\n")
-
 	def newReq(self):
 		'''Declares self as a new node entering the network'''
 		print("["+MAG+"Client"+RST+"] Making 1st contact")
@@ -35,6 +28,9 @@ class Client(object):
 			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})\n".format(response.decode("utf-8")))
 		else:
 			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})\n".format(response.decode("utf-8")))
+		self.SK.shutdown(socket.SHUT_RDWR)
+		self.SK.close()
+		print("["+MAG+"Client"+RST+"] Ended communication client side\n")
 
 	def consReq(self):
 		'''Signals an onging consensus to other nodes'''
@@ -45,6 +41,9 @@ class Client(object):
 			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})\n".format(response.decode("utf-8")))
 		else:
 			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})\n".format(response.decode("utf-8")))
+		self.SK.shutdown(socket.SHUT_RDWR)
+		self.SK.close()
+		print("["+MAG+"Client"+RST+"] Ended communication client side\n")
 
 	def memReq(self, transaction):
 		'''Shares a new transaction with the other nodes'''
@@ -58,7 +57,9 @@ class Client(object):
 			print("["+MAG+"Client"+RST+"] Shared new transaction {}\n".format(transaction))
 		else:
 			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})\n".format(response.decode("utf-8")))		
-
+		self.SK.shutdown(socket.SHUT_RDWR)
+		self.SK.close()
+		print("["+MAG+"Client"+RST+"] Ended communication client side\n")		
 
 	def getBC(self):
 		'''Gets Blockchain from distant host'''
@@ -73,22 +74,18 @@ class Client(object):
 	
 		chain = pickle.loads(data)
 		print("["+MAG+"Client"+RST+"] End of stream, received {}\n".format(chain))
+		self.SK.shutdown(socket.SHUT_RDWR)
+		self.SK.close()
+		print("["+MAG+"Client"+RST+"] Ended communication client side\n")
 
-		
-		'''
-		if response == b'1':
-			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})".format(response.decode("utf-8")))
-		else:
-			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})".format(response.decode("utf-8")))
-		'''
 
-	def shutNode(self):
-		'''[DEBUG ONLY] Shuts distant host server down'''
-		print("["+MAG+"Client"+RST+"] Shutting down distant host")
-		self.SK.send(str.encode("NODE SHUTDOWN"))
-		response = self.SK.recv(1)
-		if response == b'1':
-			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})".format(response.decode("utf-8")))
-		else:
-			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})".format(response.decode("utf-8")))
-		print("["+MAG+"Client"+RST+"] Distant node shut down\n")
+#	def shutNode(self):
+#		'''[DEBUG ONLY] Shuts distant host server down'''
+#		print("["+MAG+"Client"+RST+"] Shutting down distant host")
+#		self.SK.send(str.encode("NODE SHUTDOWN"))
+#		response = self.SK.recv(1)
+#		if response == b'1':
+#			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})".format(response.decode("utf-8")))
+#		else:
+#			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})".format(response.decode("utf-8")))
+#		print("["+MAG+"Client"+RST+"] Distant node shut down\n")

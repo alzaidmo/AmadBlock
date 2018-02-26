@@ -1,6 +1,6 @@
 # coding=utf-8
 
-import ServerThread
+import Server
 import Client
 
 class Node(object):
@@ -11,13 +11,12 @@ class Node(object):
 		self.port = port
 		self.mempool = set([])
 		self.blockchain = ["Hello", "Amadeus rocks!"]
-		self.server = ServerThread.ServerThread(self.name, self.port, self)
-		self.client = 0
+		self.server = Server.Server(name, port, self)
+		self.client = Client.Client()
 		self.miner = 0
 		self.consenter = 0
+		self.hosts = set([])
 	
 	def bootNode(self):
+		'''Start the listening server (thread)'''
 		self.server.start()
-
-	def startClient(self):
-		self.client = Client.Client()
