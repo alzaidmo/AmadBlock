@@ -22,7 +22,7 @@ class Client(object):
 	def newReq(self):
 		'''Declares self as a new node entering the network'''
 		print("["+MAG+"Client"+RST+"] Making 1st contact")
-		self.SK.send(str.encode("NODE NEW")) #New node declaration
+		self.SK.send(str.encode("NEW")) #New node declaration
 		response = self.SK.recv(1)
 		if response == b'1':
 			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})\n".format(response.decode("utf-8")))
@@ -35,7 +35,7 @@ class Client(object):
 	def consReq(self):
 		'''Signals an onging consensus to other nodes'''
 		print("["+MAG+"Client"+RST+"] Asking for consensus")	
-		self.SK.send(str.encode("NODE CONSENSUS")) #Consensus request
+		self.SK.send(str.encode("CONSENSUS")) #Consensus request
 		response = self.SK.recv(1)
 		if response == b'1':
 			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})\n".format(response.decode("utf-8")))
@@ -46,9 +46,9 @@ class Client(object):
 		print("["+MAG+"Client"+RST+"] Ended communication client side\n")
 
 	def memReq(self, transaction):
-		'''Shares a new transaction with the other nodes'''
+		'''Shares a .er nodes'''
 		print("["+MAG+"Client"+RST+"] Offering mempool update")
-		self.SK.send(str.encode("NODE UPMEM")) #Mempool update request
+		self.SK.send(str.encode("UPMEM")) #Mempool update request
 		response = self.SK.recv(1)
 		if response == b'1':
 			print("["+MAG+"Client"+RST+"] Server interpreted request successfully ({})".format(response.decode("utf-8")))
@@ -63,7 +63,7 @@ class Client(object):
 
 	def getBC(self):
 		'''Gets Blockchain from distant host'''
-		self.SK.send(str.encode("NODE BLOCKCHAIN"))
+		self.SK.send(str.encode("BLOCKCHAIN"))
 		print("["+MAG+"Client"+RST+"] Asking for Blockchain")
 		
 		response = self.SK.recv(1)
@@ -82,7 +82,7 @@ class Client(object):
 #	def shutNode(self):
 #		'''[DEBUG ONLY] Shuts distant host server down'''
 #		print("["+MAG+"Client"+RST+"] Shutting down distant host")
-#		self.SK.send(str.encode("NODE SHUTDOWN"))
+#		self.SK.send(str.encode("SHUTDOWN"))
 #		response = self.SK.recv(1)
 #		if response == b'1':
 #			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})".format(response.decode("utf-8")))

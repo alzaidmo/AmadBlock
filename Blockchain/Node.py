@@ -1,17 +1,18 @@
 # coding=utf-8
 
-import Server
+import NodeServer
+import WebServer
 import Client
 
 class Node(object):
 	"""Initializing a Node"""
-	def __init__(self, name, port):
+	def __init__(self, name):
 		super(Node, self).__init__()
 		self.name = name
-		self.port = port
 		self.mempool = set([])
-		self.blockchain = ["Hello", "Amadeus rocks!"]
-		self.server = Server.Server(name, port, self)
+		self.blockchain = ["Block#0", "Block#1"]
+		self.nodeServer = NodeServer.NodeServer(name, 4242, self)
+		self.webServer = WebServer.WebServer(name, 4254, self)
 		self.client = Client.Client()
 		self.miner = 0
 		self.consenter = 0
@@ -19,4 +20,5 @@ class Node(object):
 	
 	def bootNode(self):
 		'''Start the listening server (thread)'''
-		self.server.start()
+		self.nodeServer.start()
+		self.webServer.start()

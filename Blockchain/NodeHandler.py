@@ -7,10 +7,10 @@ import socket
 GRN = "\u001b[32;1m"
 RST = "\u001b[0m"
 
-class RequestHandler(threading.Thread):
-	"""docstring for RequestHandler"""
+class NodeHandler(threading.Thread):
+	"""docstring for NodeHandler"""
 	def __init__(self, addr, sock, node):
-		super(RequestHandler, self).__init__()
+		super(NodeHandler, self).__init__()
 		self.addr = addr
 		self.sock = sock
 		self.node = node
@@ -19,8 +19,7 @@ class RequestHandler(threading.Thread):
 	def run(self):
 		print("["+GRN+"Handler"+RST+"] Starting a new request handler for {}\n".format(self.addr[0]))
 
-		data = bytes.decode(self.sock.recv(self.buffSize))
-		typeReq, Req = data.split(' ')[0], data.split(' ')[1] #Splitting request
+		Req = bytes.decode(self.sock.recv(self.buffSize))
 
 		if ((self.addr[0] not in self.node.hosts) & (Req != "NEW")):
 			print("["+GRN+"Handler"+RST+"] Unkown host attempting to connect - Refusing\n")
@@ -29,23 +28,20 @@ class RequestHandler(threading.Thread):
 		else:
 			print("["+GRN+"Handler"+RST+"] Connection established with %s on port %d" %(self.addr[0], self.addr[1]))
 
-			if typeReq == "NODE":
-				if Req == "NEW":
-					self.addNode()
-					self.sock.send(b'1') # Confirm successfull treatment of the request					
-				elif Req == "CONSENSUS":
-					self.consent()
-					self.sock.send(b'1')
-				elif Req == "UPMEM":
-					self.sock.send(b'1')
-					self.updateMem()
-				elif Req == "BLOCKCHAIN":
-					self.sendBC()
+			if Req == "NEW":
+				self.addNode()
+				self.sock.send(b'1') # Confirm successfull treatment of the request					
+			elif Req == "CONSENSUS":
+				self.consent()
+				self.sock.send(b'1')
+			elif Req == "UPMEM":
+				self.sock.send(b'1')
+				self.updateMem()
+			elif Req == "BLOCKCHAIN":
+				self.sendBC()
 #					elif Req == "SHUTDOWN":
 #						self.shutNode(self.sock)
 
-			if typeReq == "WEB":
-				print("Web Request")
 		
 		self.sock.shutdown(socket.SHUT_RDWR)
 		self.sock.close()
