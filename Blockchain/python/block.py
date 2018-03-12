@@ -1,6 +1,7 @@
 # coding: utf-8
 
 import hashlib
+import time
 
 class Block(object):
 	"""
@@ -9,16 +10,21 @@ class Block(object):
 						hash : Le hash du block, permettant la vérification de la chaine.
 						hash_previous : Le hash du block précedent dans la chaine.
 						data : Les données contenues dans le block.
+						transactionCount : Le nombre de transactions dans le block
 	"""
 #_______________________________________________________________________
 	# Constructeur
 #_______________________________________________________________________	
 
-	def __init__(self, num_=0, data_="",hashb_=None,hashp_=None):
+	def __init__(self, num_ = 0, data_ = "", hashb_ = None, hashp_ = None, transactionCount = 1):
 		self.num = num_
 		self.data = data_
 		self.hashb = hashb_
 		self.hash_previous = hashp_ 
+		self.transactionCount = transactionCount
+		self.timestamp = time.time()
+		self.nonce = 0
+		self.createHash();
 
 
 #_______________________________________________________________________	
@@ -57,6 +63,30 @@ class Block(object):
 		"""
 		return(self.hash_previous)
 
+	def getNonce(self):
+		""" 
+			Getter de nonce
+			@Entrée : Aucune
+			@Sortie : Attribut nonce 
+		"""
+		return(self.nonce)
+
+	def getTimestamp(self):
+		""" 
+			Getter de timestamp
+			@Entrée : Aucune
+			@Sortie : Attribut timestamp 
+		"""
+		return(self.timestamp)
+
+	def getTransactionCount(self):
+		""" 
+			Getter de transactionCount
+			@Entrée : Aucune
+			@Sortie : Attribut transactionCount 
+		"""
+		return(self.transactionCount)
+
 	def setNum(self, nb):
 		""" 
 			Setter de num
@@ -73,6 +103,30 @@ class Block(object):
 		"""
 		self.hash_previous = hashpb
 
+	def setTimestamp(self, timestamp):
+		""" 
+			Setter de timestamp
+			@Entrée : Un timestamp 
+			@Sortie : Aucune
+		"""
+		self.timestamp = timestamp
+
+	def setNonce(self, nonce):
+		""" 
+			Setter de nonce
+			@Entrée : Un nonce 
+			@Sortie : Aucune
+		"""
+		self.nonce = nonce
+
+	def setTransactionCount(self, transactionCount):
+		""" 
+			Setter de transactionCount
+			@Entrée : Un transactionCount 
+			@Sortie : Aucune
+		"""
+		self.transactionCount = transactionCount
+
 
 #_______________________________________________________________________	
 	# Autres méthodes
@@ -83,8 +137,8 @@ class Block(object):
 
 	def createHash(self):
 		h = hashlib.sha224()
-		info = self.data
-		h.update(info.encode())
+		info = (str(self.num) + str(self.data) + str(self.hash_previous) + str(self.transactionCount) + str(self.timestamp) + str(self.nonce)).encode()
+		h.update(info)
 		self.hashb = h.hexdigest()
 
 
@@ -93,7 +147,12 @@ class Block(object):
 #_______________________________________________________________________	
 
 def main():
-	pass
+
+	block = Block(num_ = 0, data_ = "sdsd", hashb_ = "None", hashp_ = "None", transactionCount = 1)
+
+	block.createHash()
+
+	print(block.getHashb())
 
 if __name__ == '__main__':
 	main()

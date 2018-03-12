@@ -77,6 +77,8 @@ class Client(object):
 		self.SK.shutdown(socket.SHUT_RDWR)
 		self.SK.close()
 		print("["+MAG+"Client"+RST+"] Ended communication client side\n")
+		
+		return chain
 
 
 #	def shutNode(self):
