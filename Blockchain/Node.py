@@ -2,6 +2,9 @@
 
 import Server
 import Client
+import Block
+import Miner
+import Consenter
 
 class Node(object):
 	"""Initializing a Node"""
@@ -10,11 +13,12 @@ class Node(object):
 		self.name = name
 		self.port = port
 		self.mempool = set([])
-		self.blockchain = ["Hello", "Amadeus rocks!"]
+		self.blockchain = [Block.Block(num_ = 0, data_ = "genesis block", hashb_ = "None", hashp_ = "None", transactionCount = 1)]
+		self.difficulty = 4 
 		self.server = Server.Server(name, port, self)
 		self.client = Client.Client()
-		self.miner = 0
-		self.consenter = 0
+		self.miner = Miner.Miner(self, self.difficulty)
+		self.consenter = Consenter.Consenter(self, self.difficulty)
 		self.hosts = set([])
 	
 	def bootNode(self):
