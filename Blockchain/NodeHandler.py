@@ -75,8 +75,6 @@ class NodeHandler(threading.Thread):
 		transaction = pickle.loads(transaction)
 		self.node.mempool.add(transaction)
 		print("["+GRN+"Handler"+RST+"] Updated Mempool: {}".format(self.node.mempool))
-		self.node.miner = Miner.Miner(self.node, self.node.difficulty)
-		self.node.miner.start() #Start mining
 
 
 	def sendBC(self):

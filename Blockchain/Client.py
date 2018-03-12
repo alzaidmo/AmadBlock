@@ -73,7 +73,8 @@ class Client(object):
 			response = self.SK.recv(1)
 	
 		chain = pickle.loads(data)
-		print("["+MAG+"Client"+RST+"] End of stream, received {}\n".format(chain))
+		for block in chain:
+			print("["+MAG+"Client"+RST+"] Received {}\n".format(block))
 		self.SK.shutdown(socket.SHUT_RDWR)
 		self.SK.close()
 		print("["+MAG+"Client"+RST+"] Ended communication client side\n")

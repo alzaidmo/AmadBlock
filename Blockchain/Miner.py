@@ -2,37 +2,38 @@
 
 import Block
 import Consenter
+import threading
 
 YLW = "\u001b[93;1m"
 RST = "\u001b[0m"
 
-class Miner(object):
+class Miner(threading.Thread):
 	"""docstring for Miner"""
 	def __init__(self, node, difficulty):
 		super(Miner, self).__init__()
 		self.node = node
 		self.difficulty = difficulty# number of zeros in the hash
 		
-	def start(self):
-		Miner.log("Starting mining...")
-		self.createBlock()
-		Miner.log("Mining done !")
+	def run(self):
+		while True:
+			self.createBlock()
 
 	def createBlock(self):
 		'''Initialises a new block and starts the proof of work'''
 
 		transactionCount = len(self.node.mempool)
-		Miner.log("{} transaction(s) in the mempool", transactionCount)
+		data = []
 
-		data = ""
-		for transaction in self.node.mempool:
-			data = data + transaction
+		if transactionCount != 0:
+			Miner.log("{} transaction(s) in the mempool", transactionCount)
+			for transaction in self.node.mempool:
+				data.append(transaction)
 
-		lastBlock = self.node.blockchain[-1]
+			lastBlock = self.node.blockchain[-1]
 
-		block = Block.Block(num_ = len(self.node.blockchain), data_ = data, hashp_ = lastBlock.getHashb(), transactionCount = transactionCount)
+			block = Block.Block(num_ = len(self.node.blockchain), data_ = data, hashp_ = lastBlock.getHashb(), transactionCount = transactionCount)
 
-		self.proofOfWork(block)
+			self.proofOfWork(block)
 
 	def proofOfWork(self, block):
 		'''Computes block's hash based on the difficulty and adds the new block to the blockchain'''

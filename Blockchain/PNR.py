@@ -12,5 +12,3 @@ class PNR(object):
 
 	def __str__(self):
 		return "PNR #{}".format(self.Id)
-
-	

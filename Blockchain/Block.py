@@ -141,18 +141,6 @@ class Block(object):
 		h.update(info)
 		self.hashb = h.hexdigest()
 
-
-#_______________________________________________________________________	
-	# Main loop
-#_______________________________________________________________________	
-
-def main():
-
-	block = Block(num_ = 0, data_ = "sdsd", hashb_ = "None", hashp_ = "None", transactionCount = 1)
-
-	block.createHash()
-
-	print(block.getHashb())
-
-if __name__ == '__main__':
-	main()
+	def __str__(self):
+		for tx in self.data:
+			return "Block #{} - Transaction: {}".format(self.num, tx)

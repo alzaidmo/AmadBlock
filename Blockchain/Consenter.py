@@ -9,23 +9,27 @@ class Consenter(object):
 		self.difficulty = difficulty# number of zeros in the hash
 
 	def consent(self):
+		for node in self.node.hosts:
+			self.node.client.conToNode(node, 4242)
+			self.node.client.consReq()
+
 		Consenter.log("Resolving blockchain conflicts")
 		replaced = self.resolveConflicts()
 
 		if replaced:
-			"""for node in self.node.hosts:
-				self.node.client.conToNode(node, 4242)
-				self.node.client.consReq()"""
-			Consenter.log("blockchain was replaced")
+			
+			Consenter.log("Blockchain was replaced")
 			pass
 			#Our chain was replaced
 		else:
 			"""for node in self.node.hosts:
 				self.node.client.conToNode(node, 4242)
 				self.node.client.consReq()"""
-			Consenter.log("blockchain is authoritative")
+			Consenter.log("Blockchain is authoritative")
 			pass
 			#Our chain is authoritative
+		for block in self.node.blockchain:
+			Consenter.log("Current Blockchain {}", block)
 
 
 	def resolveConflicts(self):
