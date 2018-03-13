@@ -25,9 +25,9 @@ class Client(object):
 		self.SK.send(str.encode("NEW")) #New node declaration
 		response = self.SK.recv(1)
 		if response == b'1':
-			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})\n".format(response.decode("utf-8")))
+			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})".format(response.decode("utf-8")))
 		else:
-			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})\n".format(response.decode("utf-8")))
+			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})".format(response.decode("utf-8")))
 		self.SK.shutdown(socket.SHUT_RDWR)
 		self.SK.close()
 		print("["+MAG+"Client"+RST+"] Ended communication client side\n")
@@ -38,9 +38,9 @@ class Client(object):
 		self.SK.send(str.encode("CONSENSUS")) #Consensus request
 		response = self.SK.recv(1)
 		if response == b'1':
-			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})\n".format(response.decode("utf-8")))
+			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})".format(response.decode("utf-8")))
 		else:
-			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})\n".format(response.decode("utf-8")))
+			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})".format(response.decode("utf-8")))
 		self.SK.shutdown(socket.SHUT_RDWR)
 		self.SK.close()
 		print("["+MAG+"Client"+RST+"] Ended communication client side\n")
@@ -54,9 +54,9 @@ class Client(object):
 			print("["+MAG+"Client"+RST+"] Server interpreted request successfully ({})".format(response.decode("utf-8")))
 			transaction_b = pickle.dumps(transaction)
 			self.SK.send(transaction_b)
-			print("["+MAG+"Client"+RST+"] Shared new transaction {}\n".format(transaction))
+			print("["+MAG+"Client"+RST+"] Shared new transaction {}".format(transaction))
 		else:
-			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})\n".format(response.decode("utf-8")))		
+			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})".format(response.decode("utf-8")))		
 		self.SK.shutdown(socket.SHUT_RDWR)
 		self.SK.close()
 		print("["+MAG+"Client"+RST+"] Ended communication client side\n")		
@@ -74,7 +74,7 @@ class Client(object):
 	
 		chain = pickle.loads(data)
 		for block in chain:
-			print("["+MAG+"Client"+RST+"] Received {}\n".format(block))
+			print("["+MAG+"Client"+RST+"] Received {}".format(block))
 		self.SK.shutdown(socket.SHUT_RDWR)
 		self.SK.close()
 		print("["+MAG+"Client"+RST+"] Ended communication client side\n")

@@ -30,6 +30,7 @@ class Consenter(object):
 			#Our chain is authoritative
 		for block in self.node.blockchain:
 			Consenter.log("Current Blockchain {}", block)
+		print("\n")
 
 
 	def resolveConflicts(self):
@@ -111,6 +112,6 @@ class Consenter(object):
 	def log(msg, *params):
 		''' logs a message to the screen '''
 		if ( len(params) == 0 ):
-			print("["+RED+"Consenter"+RST+"] " + msg + "\n")
+			print("["+RED+"Consenter"+RST+"] " + msg)
 		else:
-			print(("["+RED+"Consenter"+RST+"] " + msg + "\n").format(*params))
+			print(("["+RED+"Consenter"+RST+"] " + msg).format(*params))

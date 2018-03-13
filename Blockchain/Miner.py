@@ -48,7 +48,7 @@ class Miner(threading.Thread):
 		Miner.log("Done computing, block successfuly added to the local blockchain !")
 
 		self.node.mempool = set([])
-		Miner.log("Flushed mempool !")
+		Miner.log("Flushed mempool !\n")
 
 		self.node.consenter.consent()
 
@@ -57,6 +57,6 @@ class Miner(threading.Thread):
 	def log(msg, *params):
 		''' logs a message to the screen '''
 		if ( len(params) == 0 ):
-			print("["+YLW+"Miner"+RST+"] " + msg + "\n")
+			print("["+YLW+"Miner"+RST+"] " + msg)
 		else:
-			print(("["+YLW+"Miner"+RST+"] " + msg + "\n").format(*params))
+			print(("["+YLW+"Miner"+RST+"] " + msg).format(*params))

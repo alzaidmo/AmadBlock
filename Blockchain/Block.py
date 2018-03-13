@@ -142,5 +142,7 @@ class Block(object):
 		self.hashb = h.hexdigest()
 
 	def __str__(self):
+		msg = "Block #{} - Transactions: ".format(self.num)
 		for tx in self.data:
-			return "Block #{} - Transaction: {}".format(self.num, tx)
+			msg += "{} ".format(tx)
+			return msg

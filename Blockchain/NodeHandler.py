@@ -18,7 +18,7 @@ class NodeHandler(threading.Thread):
 		self.buffSize = 32
 
 	def run(self):
-		print("["+GRN+"Handler"+RST+"] Starting a new request handler for {}\n".format(self.addr[0]))
+		print("["+GRN+"Handler"+RST+"] Starting a new request handler for {}".format(self.addr[0]))
 
 		Req = bytes.decode(self.sock.recv(self.buffSize))
 
