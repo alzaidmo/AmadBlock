@@ -28,6 +28,8 @@ class Miner(threading.Thread):
 			Miner.log("{} transaction(s) in the mempool", transactionCount)
 			for transaction in self.node.mempool:
 				data.append(transaction)
+			self.node.mempool = set([])
+			Miner.log("Flushed mempool !\n")
 
 			lastBlock = self.node.blockchain[-1]
 
@@ -46,9 +48,6 @@ class Miner(threading.Thread):
 
 		self.node.blockchain.append(block)
 		Miner.log("Done computing, block successfuly added to the local blockchain !")
-
-		self.node.mempool = set([])
-		Miner.log("Flushed mempool !\n")
 
 		for host in self.node.hosts:
 			self.node.client.conToNode(host, 4242)
