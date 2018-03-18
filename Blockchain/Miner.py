@@ -50,6 +50,9 @@ class Miner(threading.Thread):
 		self.node.mempool = set([])
 		Miner.log("Flushed mempool !\n")
 
+		for host in self.node.hosts:
+			self.node.client.conToNode(host, 4242)
+			self.node.client.consReq()
 		self.node.consenter.consent()
 
 
