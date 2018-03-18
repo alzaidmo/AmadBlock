@@ -54,6 +54,8 @@ class NodeHandler(threading.Thread):
 		'''Add an incoming node to the list of trusted hosts'''
 		print("["+GRN+"Handler"+RST+"] New node reaching out...")
 		self.node.hosts.add(self.addr[0])
+		self.node.client.conToNode(addr[0], 4242)
+		self.node.client.newReq()
 		print("["+GRN+"Handler"+RST+"] Added distant host to known hosts: {}".format(self.node.hosts))
 
 	
