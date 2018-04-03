@@ -24,7 +24,7 @@ class Block(object):
 		self.transactionCount = transactionCount
 		self.timestamp = time.time()
 		self.nonce = 0
-		self.createHash();
+		self.proof = 0
 
 
 #_______________________________________________________________________	
@@ -70,6 +70,14 @@ class Block(object):
 			@Sortie : Attribut nonce 
 		"""
 		return(self.nonce)
+
+	def getProof(self):
+		""" 
+			Getter de proof
+			@Entrée : Aucune
+			@Sortie : Attribut proof 
+		"""
+		return(self.proof)
 
 	def getTimestamp(self):
 		""" 
@@ -136,10 +144,16 @@ class Block(object):
 		self.data = self.data + PNR
 
 	def createHash(self):
-		h = hashlib.sha224()
+		h = hashlib.sha256()
 		info = (str(self.num) + str(self.data) + str(self.hash_previous) + str(self.transactionCount) + str(self.timestamp) + str(self.nonce)).encode()
 		h.update(info)
 		self.hashb = h.hexdigest()
+
+	def createPoW(self, prev_nonce):
+		h = hashlib.sha256()
+		info = (str(prev_nonce)+str(self.num) + str(self.data) + str(self.hash_previous) + str(self.transactionCount) + str(self.timestamp) + str(self.nonce)).encode()
+		h.update(info)
+		self.proof = h.hexdigest()
 
 	def __str__(self):
 		msg = "Block #{} - Transactions: ".format(self.num)

@@ -38,11 +38,15 @@ class Miner(threading.Thread):
 	def proofOfWork(self, block):
 		'''Computes block's hash based on the difficulty and adds the new block to the blockchain'''
 
-		Miner.log("Computing hash for the new block...")
+		Miner.log("Computing hash for the new block")
+		prev_nonce = self.node.blockchain[-1].getNonce()
+		Miner.log("Solving proof of work: hash of ({} + myHash) starts with {} zeros...", prev_nonce, self.difficulty)
 
-		while ( block.getHashb()[:self.difficulty] != self.difficulty*"0" ):
+		while ( block.getProof()[:self.difficulty] != self.difficulty*"0" ):
 			block.setNonce(block.getNonce() + 1)
-			block.createHash();
+			block.createPoW(prev_nonce);
+
+		block.createHash(); #Generate the hash of the block once the nonce has been fixed
 
 		self.node.blockchain.append(block)
 		Miner.log("Done computing, block successfuly added to the local blockchain !")

@@ -1,3 +1,5 @@
+import hashlib
+
 RED = "\u001b[31;1m"
 RST = "\u001b[0m"
 
@@ -81,7 +83,8 @@ class Consenter(object):
 		while current_index < len(chain):
 			block = chain[current_index]
 			# Check that the hash of the block is correct
-			if block.getHashPrev() != last_block.getHashb():
+			if block.getHashPrev() != last_block.createHash():
+				self.log("Error in the block order - Block #{} is corrupted", current_index - 1)
 				return False
 
 			# Check that the Proof of Work is correct
@@ -102,7 +105,10 @@ class Consenter(object):
 		:return: <bool> True if correct, False if not.
 
 		"""
-		if(lastBlock.getHashb() != block.getHashPrev() or block.getHashb()[:self.difficulty] != self.difficulty*"0"):
+		prev_nonce = lastBlock.getNonce()
+
+		if block.createPoW(prev_nonce)[:self.difficulty] != self.difficulty*"0"):
+			self.log("Error in the proof of work - Either Block#{} has not generated a PoW or Block #{} is corrupted", current_index, current_index - 1)
 			return False
 
 		return True
