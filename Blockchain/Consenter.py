@@ -11,10 +11,6 @@ class Consenter(object):
 		self.difficulty = difficulty# number of zeros in the hash
 
 	def consent(self):
-		for node in self.node.hosts:
-			self.node.client.conToNode(node, 4242)
-			self.node.client.consReq()
-
 		Consenter.log("Resolving blockchain conflicts")
 		replaced = self.resolveConflicts()
 

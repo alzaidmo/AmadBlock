@@ -60,7 +60,7 @@ class NodeHandler(threading.Thread):
 	def consent(self):
 		'''Trigger consesus'''
 		print("["+GRN+"Handler"+RST+"] Consensus signaled by distant host")
-		#self.node.consenter.consent()
+		self.node.consenter.consent()
 
 
 	def updateMem(self):

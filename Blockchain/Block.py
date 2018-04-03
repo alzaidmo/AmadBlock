@@ -159,4 +159,4 @@ class Block(object):
 		msg = "Block #{} - Transactions: ".format(self.num)
 		for tx in self.data:
 			msg += "{} ".format(tx)
-			return msg
+		return msg
