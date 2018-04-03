@@ -34,7 +34,6 @@ class NodeHandler(threading.Thread):
 				self.sock.send(b'1') # Confirm successfull treatment of the request					
 			elif Req == "CONSENSUS":
 				self.consent()
-				self.sock.send(b'1')
 			elif Req == "UPMEM":
 				self.sock.send(b'1')
 				self.updateMem()
@@ -60,6 +59,7 @@ class NodeHandler(threading.Thread):
 	def consent(self):
 		'''Trigger consesus'''
 		print("["+GRN+"Handler"+RST+"] Consensus signaled by distant host")
+		self.sock.send(b'1')
 		self.node.consenter.consent()
 
 
@@ -67,6 +67,7 @@ class NodeHandler(threading.Thread):
 		'''Send node's BC to distant host'''
 		print("["+GRN+"Handler"+RST+"] Sending our BC to distant host")
 		chain_b = pickle.dumps(self.node.blockchain)
+		print("{DATA handler} - " + str(chain_b [:10]) + "..." + str(chain_b [-10:]))
 		self.sock.send(chain_b)
 		print("["+GRN+"Handler"+RST+"] BC sent")
 

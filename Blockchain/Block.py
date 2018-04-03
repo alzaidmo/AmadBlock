@@ -2,6 +2,7 @@
 
 import hashlib
 import time
+import PNR
 
 class Block(object):
 	"""
@@ -19,12 +20,14 @@ class Block(object):
 	def __init__(self, num_ = 0, data_ = "", hashb_ = None, hashp_ = None, transactionCount = 1):
 		self.num = num_
 		self.data = data_
-		self.hashb = hashb_
 		self.hash_previous = hashp_ 
 		self.transactionCount = transactionCount
 		self.timestamp = time.time()
 		self.nonce = 0
 		self.proof = 123456789
+
+		self.hashb = self.createHash()
+		#Initial hash of the block before its nonce change with mining - Useful for the genesis block
 
 
 #_______________________________________________________________________	
@@ -111,6 +114,15 @@ class Block(object):
 		"""
 		self.hash_previous = hashpb
 
+	def setHash(self, hash_new):
+		""" 
+			Setter de hash
+			@Entrée : Un hash 
+			@Sortie : Aucune
+		"""
+		self.hashb = hash_new
+
+
 	def setTimestamp(self, timestamp):
 		""" 
 			Setter de timestamp
@@ -126,6 +138,14 @@ class Block(object):
 			@Sortie : Aucune
 		"""
 		self.nonce = nonce
+
+	def setProof(self, proof):
+		""" 
+			Setter de proof
+			@Entrée : Un proof 
+			@Sortie : Aucune
+		"""
+		self.proof = proof
 
 	def setTransactionCount(self, transactionCount):
 		""" 
@@ -147,16 +167,18 @@ class Block(object):
 		h = hashlib.sha256()
 		info = (str(self.num) + str(self.data) + str(self.hash_previous) + str(self.transactionCount) + str(self.timestamp) + str(self.nonce)).encode()
 		h.update(info)
-		self.hashb = h.hexdigest()
+		#print("{BLOCK} hashed the following parameters: " + str(self.num) + " " + str(self.data) + " " + str(self.hash_previous) + " " \
+		#						  + str(self.transactionCount) + " " + str(self.timestamp) + " " + str(self.nonce))
+		return h.hexdigest()
 
 	def createPoW(self, prev_nonce):
 		h = hashlib.sha256()
-		info = (str(prev_nonce)+str(self.num) + str(self.data) + str(self.hash_previous) + str(self.transactionCount) + str(self.timestamp) + str(self.nonce)).encode()
+		info = (str(prev_nonce)+str(self.num) + str(self.data) + str(self.hash_previous) + str(self.transactionCount) + str(self.timestamp) +str(self.nonce)).encode()
 		h.update(info)
-		self.proof = h.hexdigest()
+		return h.hexdigest()
 
 	def __str__(self):
 		msg = "Block #{} - Transactions: ".format(self.num)
 		for tx in self.data:
-			msg += "{} ".format(tx)
+			msg += "PNR#{} ".format(tx[0])
 		return msg

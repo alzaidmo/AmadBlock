@@ -12,3 +12,7 @@ class PNR(object):
 
 	def __str__(self):
 		return "PNR #{}".format(self.Id)
+
+	def raw_data(self):
+		return (str(self.Id) + str(self.name) + str(self.firstname) + str(self.phone) \
+		       + str(self.company) + str(self.departure) + str(self.arrival))

@@ -28,8 +28,8 @@ class Client(object):
 			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})".format(response.decode("utf-8")))
 		else:
 			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})".format(response.decode("utf-8")))
-		self.SK.shutdown(socket.SHUT_RDWR)
-		self.SK.close()
+		self.SK.shutdown(socket.SHUT_WR)
+		#self.SK.close()
 		print("["+MAG+"Client"+RST+"] Ended communication client side\n")
 
 	def consReq(self):
@@ -41,8 +41,8 @@ class Client(object):
 			print("["+MAG+"Client"+RST+"] Server treated request successfully ({})".format(response.decode("utf-8")))
 		else:
 			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})".format(response.decode("utf-8")))
-		self.SK.shutdown(socket.SHUT_RDWR)
-		self.SK.close()
+		self.SK.shutdown(socket.SHUT_WR)
+		#self.SK.close()
 		print("["+MAG+"Client"+RST+"] Ended communication client side\n")
 
 	def memReq(self, transaction):
@@ -57,8 +57,8 @@ class Client(object):
 			print("["+MAG+"Client"+RST+"] Shared new transaction {}".format(transaction))
 		else:
 			print("["+MAG+"Client"+RST+"] Server signaled a problem ({})".format(response.decode("utf-8")))		
-		self.SK.shutdown(socket.SHUT_RDWR)
-		self.SK.close()
+		self.SK.shutdown(socket.SHUT_WR)
+		#self.SK.close()
 		print("["+MAG+"Client"+RST+"] Ended communication client side\n")		
 
 	def getBC(self):
@@ -72,11 +72,12 @@ class Client(object):
 			data += response
 			response = self.SK.recv(1)
 	
+		print("{DATA client} - " + str(data [:10]) + "..." + str(data [-10:]))
 		chain = pickle.loads(data)
 		for block in chain:
 			print("["+MAG+"Client"+RST+"] Received {}".format(block))
-		self.SK.shutdown(socket.SHUT_RDWR)
-		self.SK.close()
+		self.SK.shutdown(socket.SHUT_WR)
+		#self.SK.close()
 		print("["+MAG+"Client"+RST+"] Ended communication client side\n")
 		
 		return chain
@@ -90,8 +91,8 @@ class Client(object):
 
 		print("["+MAG+"Client"+RST+"] Sent new transaction {}".format(transaction))
 		
-		self.SK.shutdown(socket.SHUT_RDWR)
-		self.SK.close()
+		self.SK.shutdown(socket.SHUT_WR)
+		#self.SK.close()
 		print("["+MAG+"Client"+RST+"] Ended communication client side\n")
 
 #	def shutNode(self):

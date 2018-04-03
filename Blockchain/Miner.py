@@ -3,6 +3,7 @@
 import Block
 import Consenter
 import threading
+import PNR
 
 YLW = "\u001b[93;1m"
 RST = "\u001b[0m"
@@ -27,7 +28,7 @@ class Miner(threading.Thread):
 		if transactionCount != 0:
 			Miner.log("{} transaction(s) in the mempool", transactionCount)
 			for transaction in self.node.mempool:
-				data.append(transaction)
+				data.append(transaction.raw_data())
 			self.node.mempool = set([])
 			Miner.log("Flushed mempool !\n")
 
@@ -46,12 +47,12 @@ class Miner(threading.Thread):
 
 		while ( block.getProof()[:self.difficulty] != self.difficulty*"0" ):
 			block.setNonce(block.getNonce() + 1)
-			block.createPoW(prev_nonce);
+			block.setProof(block.createPoW(prev_nonce));
 
-		block.createHash(); #Generate the hash of the block once the nonce has been fixed
+		block.setHash(block.createHash()); #Generate the hash of the block once the nonce has been fixed
 
 		self.node.blockchain.append(block)
-		Miner.log("Done computing, nonce {} / PoW {} - Block#{} has been mined", block.getNonce(), block.getProof(), block.getNum())
+		Miner.log("Block#{} has been mined\n\t- nonce: {}\n\t- Proof of work: {}\n\t- Previous hash: {}\n\t- Block hash: {}\n", block.getNum(), block.getNonce(), block.getProof(), block.getHashPrev(), block.getHashb())
 
 		for host in self.node.hosts:
 			self.node.client.conToNode(host, 4242)

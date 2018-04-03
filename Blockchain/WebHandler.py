@@ -3,6 +3,7 @@
 import threading
 import pickle
 import socket
+import PNR
 
 GRN = "\u001b[32;1m"
 RST = "\u001b[0m"
@@ -46,4 +47,7 @@ class WebHandler(threading.Thread):
 
 		transaction = pickle.loads(transaction)
 		self.node.mempool.add(transaction)
-		print("["+GRN+"Handler"+RST+"] Updated Mempool: {}".format(self.node.mempool))
+		msg = "["+GRN+"Handler"+RST+"] Updated Mempool: "
+		for pnr in self.node.mempool:
+			msg += str(pnr) + " "
+		print(msg)

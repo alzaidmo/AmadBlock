@@ -9,26 +9,32 @@ class Consenter(object):
 		super(Consenter, self).__init__()
 		self.node = node
 		self.difficulty = difficulty# number of zeros in the hash
+		self.running = False #Is a consensus already running?
 
 	def consent(self):
-		Consenter.log("Resolving blockchain conflicts")
-		replaced = self.resolveConflicts()
+		if not (self.running):
+			self.running = True
+			Consenter.log("Resolving blockchain conflicts")
+			replaced = self.resolveConflicts()
 
-		if replaced:
+			if replaced:
 			
-			Consenter.log("Blockchain was replaced")
-			pass
-			#Our chain was replaced
+				Consenter.log("Blockchain was replaced")
+				pass
+				#Our chain was replaced
+			else:
+				"""for node in self.node.hosts:
+					self.node.client.conToNode(node, 4242)
+					self.node.client.consReq()"""
+				Consenter.log("Blockchain is authoritative")
+				pass
+				#Our chain is authoritative
+			self.running = False
+			for block in self.node.blockchain:
+				self.log("Current Blockchain {}", block)
+			print("\n")
 		else:
-			"""for node in self.node.hosts:
-				self.node.client.conToNode(node, 4242)
-				self.node.client.consReq()"""
-			Consenter.log("Blockchain is authoritative")
-			pass
-			#Our chain is authoritative
-		for block in self.node.blockchain:
-			Consenter.log("Current Blockchain {}", block)
-		print("\n")
+			self.log("A consensus is already running")
 
 
 	def resolveConflicts(self):
@@ -78,9 +84,10 @@ class Consenter(object):
 
 		while current_index < len(chain):
 			block = chain[current_index]
-			# Check that the hash of the block is correct
-			if block.getHashPrev() != last_block.createHash():
-				self.log("Error in the block order - Block #{} is corrupted", current_index - 1)
+			# Check that the block is at the right place
+			calc_prevHash = last_block.createHash()
+			if block.getHashPrev() != calc_prevHash:
+				self.log("Error in the block order\nAnnounced by Block#{}: {}\nCalculated from Block#{}: {}\nBlock #{} is corrupted", block.getNum(), block.getHashPrev(), last_block.getNum(), calc_prevHash, current_index - 1)
 				return False
 
 			# Check that the Proof of Work is correct
@@ -102,9 +109,10 @@ class Consenter(object):
 
 		"""
 		prev_nonce = lastBlock.getNonce()
+		calc_PoW = block.createPoW(prev_nonce)
 
-		if (block.createPoW(prev_nonce)[:self.difficulty] != self.difficulty*"0"):
-			self.log("Error in the proof of work - Either Block#{} has not generated a PoW or Block #{} is corrupted", current_index, current_index - 1)
+		if (calc_PoW[:self.difficulty] != self.difficulty*"0"):
+			self.log("Error in the proof of work\nCalculated: {}\nEither Block#{} has not generated a PoW or Block #{} is corrupted", calc_PoW, block.getNum(), lastBlock.getNum())
 			return False
 
 		return True
