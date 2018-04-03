@@ -24,7 +24,7 @@ class Block(object):
 		self.transactionCount = transactionCount
 		self.timestamp = time.time()
 		self.nonce = 0
-		self.proof = 0
+		self.proof = 123456789
 
 
 #_______________________________________________________________________	
@@ -77,7 +77,7 @@ class Block(object):
 			@Entrée : Aucune
 			@Sortie : Attribut proof 
 		"""
-		return(self.proof)
+		return(str(self.proof))
 
 	def getTimestamp(self):
 		""" 

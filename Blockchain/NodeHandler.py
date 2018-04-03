@@ -63,20 +63,6 @@ class NodeHandler(threading.Thread):
 		self.node.consenter.consent()
 
 
-	def updateMem(self):
-		'''Update Mempool of current node'''
-		print("["+GRN+"Handler"+RST+"] New transaction shared by distant host")
-		data = self.sock.recv(1)
-		transaction= b''
-		while data:
-			transaction += data
-			data = self.sock.recv(1)
-
-		transaction = pickle.loads(transaction)
-		self.node.mempool.add(transaction)
-		print("["+GRN+"Handler"+RST+"] Updated Mempool: {}".format(self.node.mempool))
-
-
 	def sendBC(self):
 		'''Send node's BC to distant host'''
 		print("["+GRN+"Handler"+RST+"] Sending our BC to distant host")

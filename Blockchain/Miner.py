@@ -51,7 +51,7 @@ class Miner(threading.Thread):
 		block.createHash(); #Generate the hash of the block once the nonce has been fixed
 
 		self.node.blockchain.append(block)
-		Miner.log("Done computing, block successfuly added to the local blockchain !")
+		Miner.log("Done computing, nonce {} / PoW {} - Block#{} has been mined", block.getNonce(), block.getProof(), block.getNum())
 
 		for host in self.node.hosts:
 			self.node.client.conToNode(host, 4242)

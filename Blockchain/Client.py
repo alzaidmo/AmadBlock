@@ -82,6 +82,18 @@ class Client(object):
 		return chain
 
 
+	def webTrans(self, transaction):
+		'''Shares a .er nodes'''
+		print("["+MAG+"Client"+RST+"] Sending new transaction")
+		transaction_b = pickle.dumps(transaction)
+		self.SK.send(transaction_b)
+
+		print("["+MAG+"Client"+RST+"] Sent new transaction {}".format(transaction))
+		
+		self.SK.shutdown(socket.SHUT_RDWR)
+		self.SK.close()
+		print("["+MAG+"Client"+RST+"] Ended communication client side\n")
+
 #	def shutNode(self):
 #		'''[DEBUG ONLY] Shuts distant host server down'''
 #		print("["+MAG+"Client"+RST+"] Shutting down distant host")

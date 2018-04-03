@@ -103,7 +103,7 @@ class Consenter(object):
 		"""
 		prev_nonce = lastBlock.getNonce()
 
-		if block.createPoW(prev_nonce)[:self.difficulty] != self.difficulty*"0"):
+		if (block.createPoW(prev_nonce)[:self.difficulty] != self.difficulty*"0"):
 			self.log("Error in the proof of work - Either Block#{} has not generated a PoW or Block #{} is corrupted", current_index, current_index - 1)
 			return False
 

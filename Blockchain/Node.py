@@ -21,6 +21,7 @@ class Node(object):
 		self.miner = Miner.Miner(self, self.difficulty)
 		self.consenter = Consenter.Consenter(self, self.difficulty)
 		self.hosts = set([])
+		self.webHosts = set([])
 	
 	def bootNode(self):
 		'''Start the listening server (thread)'''
