@@ -165,7 +165,7 @@ class Block(object):
 
 	def createHash(self):
 		h = hashlib.sha256()
-		info = (str(self.num) + str(self.data) + str(self.hash_previous) + str(self.transactionCount) + str(self.timestamp) + str(self.nonce)).encode()
+		info = (str(self.num) + str(self.data) + str(self.hash_previous) + str(self.transactionCount) + str(self.nonce)).encode()
 		h.update(info)
 		#print("{BLOCK} hashed the following parameters: " + str(self.num) + " " + str(self.data) + " " + str(self.hash_previous) + " " \
 		#						  + str(self.transactionCount) + " " + str(self.timestamp) + " " + str(self.nonce))
@@ -173,7 +173,7 @@ class Block(object):
 
 	def createPoW(self, prev_nonce):
 		h = hashlib.sha256()
-		info = (str(prev_nonce)+str(self.num) + str(self.data) + str(self.hash_previous) + str(self.transactionCount) + str(self.timestamp) +str(self.nonce)).encode()
+		info = (str(prev_nonce)+str(self.num) + str(self.data) + str(self.hash_previous) + str(self.transactionCount) +str(self.nonce)).encode()
 		h.update(info)
 		return h.hexdigest()
 

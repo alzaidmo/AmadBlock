@@ -14,10 +14,10 @@ class Node(object):
 		self.name = name
 		self.mempool = set([])
 		self.blockchain = [Block.Block(num_ = 0, data_ = ["Genesis Block"], hashb_ = "None", hashp_ = "None", transactionCount = 1)]
-		self.difficulty = 4 
+		self.difficulty = 5 
 		self.nodeServer = NodeServer.NodeServer(name, 4242, self)
 		self.webServer = WebServer.WebServer(name, 4254, self)
-		self.client = Client.Client()
+		self.client = Client.Client(name)
 		self.miner = Miner.Miner(self, self.difficulty)
 		self.consenter = Consenter.Consenter(self, self.difficulty)
 		self.hosts = set([])

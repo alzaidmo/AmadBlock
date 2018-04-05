@@ -4,6 +4,7 @@ import Block
 import Consenter
 import threading
 import PNR
+import Client
 
 YLW = "\u001b[93;1m"
 RST = "\u001b[0m"
@@ -13,6 +14,7 @@ class Miner(threading.Thread):
 	def __init__(self, node, difficulty):
 		super(Miner, self).__init__()
 		self.node = node
+		self.client = Client.Client("Miner")
 		self.difficulty = difficulty# number of zeros in the hash
 		
 	def run(self):
@@ -50,14 +52,42 @@ class Miner(threading.Thread):
 			block.setProof(block.createPoW(prev_nonce));
 
 		block.setHash(block.createHash()); #Generate the hash of the block once the nonce has been fixed
+		
 
-		self.node.blockchain.append(block)
-		Miner.log("Block#{} has been mined\n\t- nonce: {}\n\t- Proof of work: {}\n\t- Previous hash: {}\n\t- Block hash: {}\n", block.getNum(), block.getNonce(), block.getProof(), block.getHashPrev(), block.getHashb())
+		#Blockchain might have been replaced during mining, to avoid duplicate blocks, check if the freshly mined block still fits in the updated Blockchain
+		
+		if self.blockInOrder(block):
+		
+			self.node.blockchain.append(block)
+			Miner.log("Block#{} has been mined\n\t- nonce: {}\n\t- Proof of work: {}\n\t- Previous hash: {}\n\t- Block hash: {}\n", \
+		        block.getNum(), block.getNonce(), block.getProof(), block.getHashPrev(), block.getHashb())
 
-		for host in self.node.hosts:
-			self.node.client.conToNode(host, 4242)
-			self.node.client.consReq()
-		self.node.consenter.consent()
+			for host in self.node.hosts:
+				self.client.conToNode(host, 4242)
+				self.client.consReq()
+			self.node.consenter.consent()
+
+
+	def blockInOrder(self, new_block):
+		"""
+		Determine if a newly created block can be added to the current Blockchain
+		before asking for consensus
+
+		:param block: A block
+		:return: True if valid, False if not
+		"""
+
+		last_block = self.node.blockchain[-1]
+
+		# Check that the block is at the right place
+		calc_prevHash = last_block.createHash()
+		if new_block.getHashPrev() != calc_prevHash:
+			self.log("Abort linking of the new block - The newly created block does not belong behind the last block of the current Blockchain\n\t"+
+			"Maybe the blockchain was updated during mining")
+			return False
+		
+		return True
+
 
 
 	@staticmethod

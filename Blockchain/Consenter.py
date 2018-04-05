@@ -1,4 +1,5 @@
 import hashlib
+import Client
 
 RED = "\u001b[31;1m"
 RST = "\u001b[0m"
@@ -8,6 +9,7 @@ class Consenter(object):
 	def __init__(self, node, difficulty):
 		super(Consenter, self).__init__()
 		self.node = node
+		self.client = Client.Client("Consenter")
 		self.difficulty = difficulty# number of zeros in the hash
 		self.running = False #Is a consensus already running?
 
@@ -23,9 +25,6 @@ class Consenter(object):
 				pass
 				#Our chain was replaced
 			else:
-				"""for node in self.node.hosts:
-					self.node.client.conToNode(node, 4242)
-					self.node.client.consReq()"""
 				Consenter.log("Blockchain is authoritative")
 				pass
 				#Our chain is authoritative
@@ -53,8 +52,8 @@ class Consenter(object):
 
 		# Grab and verify the chains from all the nodes in our network
 		for node in neighbours:
-			self.node.client.conToNode(node, 4242)
-			chain = self.node.client.getBC()
+			self.client.conToNode(node, 4242)
+			chain = self.client.getBC()
 			if chain:
 				length = len(chain)
 

@@ -17,7 +17,7 @@ if __name__ == "__main__":
 	for host in nodes:
 		myNode.client.conToNode(host, 4254)
 		myNode.client.webTrans(myPNR1)
-
+	
 	for host in nodes:
 		myNode.client.conToNode(host, 4254)
 		myNode.client.webTrans(myPNR2)
@@ -29,3 +29,4 @@ if __name__ == "__main__":
 	for host in nodes:	
 		myNode.client.conToNode(host, 4254)
 		myNode.client.webTrans(myPNR4)
+	
