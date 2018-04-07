@@ -3,7 +3,7 @@
 import Node
 import time
 
-sender_IP = "127.0.0.1"
+sender_IP = "192.168.11.209"
 
 if __name__ == "__main__":
 	

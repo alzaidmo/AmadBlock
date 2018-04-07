@@ -3,7 +3,7 @@ import PNR
 import Client
 
 WebSender = Client.Client("convertisseur") 
-hosts = set(["localhost"])
+hosts = set(["localhost", "192.168.11.23"])
 
 def converter(fichier,hosts):
 	f = fichier
@@ -23,7 +23,7 @@ def converter(fichier,hosts):
 
 
 if __name__ == '__main__':
-	monPNR = converter("recapitulatif.xml", hosts)
+	monPNR = converter("templates/recapitulatif.xml", hosts)
 
 
 

@@ -37,7 +37,7 @@ class Node(object):
 		try:
 		#If a file already exists
 			self.blockchain = pickle.load(open("./"+self.name+".bc", "rb"))
-		except EOFError:
+		except (EOFError, IOError):
 		#If the file is empty, store genesis block to start with
 			self.saveBC()
 

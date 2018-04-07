@@ -1,29 +1,23 @@
 # coding=utf-8
 
-import Block
-import Consenter
-import threading
-import PNR
+import Node
+import time
+import Miner
 import Client
+import Block
 
-YLW = "\u001b[93;1m"
-RST = "\u001b[0m"
+sender_IP = "127.0.0.1" #IP of the web server from which requests are emanating
+node_IP = "192.168.11.23" #IP of established node
 
-class Miner(threading.Thread):
-	"""docstring for Miner"""
+class MaliciousMiner(Miner.Miner):
 	def __init__(self, node, difficulty):
-		super(Miner, self).__init__()
+		super(MaliciousMiner, self).__init__(node, difficulty)
 		self.node = node
 		self.client = Client.Client("Miner")
 		self.difficulty = difficulty# number of zeros in the hash
 		
-	def run(self):
-		while True:
-			self.createBlock()
-
+		
 	def createBlock(self):
-		'''Initialises a new block and starts the proof of work'''
-
 		transactionCount = len(self.node.mempool)
 		data = []
 
@@ -47,12 +41,11 @@ class Miner(threading.Thread):
 		prev_nonce = self.node.blockchain[-1].getNonce()
 		self.log("Solving proof of work: hash of ({} + myHash) starts with {} zeros...", prev_nonce, self.difficulty)
 
-		while ( block.getProof()[:self.difficulty] != self.difficulty*"0" ):
-			block.setNonce(block.getNonce() + 1)
-			block.setProof(block.createPoW(prev_nonce));
+		#while ( block.getProof()[:self.difficulty] != self.difficulty*"0" ):
+		#	block.setNonce(block.getNonce() + 1)
+		#	block.setProof(block.createPoW(prev_nonce));
 
 		block.setHash(block.createHash()); #Generate the hash of the block once the nonce has been fixed
-		
 
 		#Blockchain might have been replaced during mining, to avoid duplicate blocks, check if the freshly mined block still fits in the updated Blockchain
 		
@@ -89,11 +82,14 @@ class Miner(threading.Thread):
 		return True
 
 
+if __name__ == "__main__":
+	
+	myMaliciousNode = Node.Node("Malicious Node")
+	myMaliciousNode.miner = MaliciousMiner(myMaliciousNode, myMaliciousNode.difficulty)
+	myMaliciousNode.webHosts.add(sender_IP)
+	myMaliciousNode.hosts.add(node_IP)
+	myMaliciousNode.bootNode()
 
-	@staticmethod
-	def log(msg, *params):
-		''' logs a message to the screen '''
-		if ( len(params) == 0 ):
-			print("["+YLW+"Miner"+RST+"] " + msg)
-		else:
-			print(("["+YLW+"Miner"+RST+"] " + msg).format(*params))
+	for node in myMaliciousNode.hosts:
+		myMaliciousNode.client.conToNode(node, 4242)
+		myMaliciousNode.client.newReq()
