@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<reservation>
+	<id>4</id>
+	<nom>Logario</nom>
+	<prenom>Mathieu</prenom>
+	<telephone>0669696969</telephone>
+	<compagnie>AFKLM</compagnie>
+	<depart>Paris</depart>
+	<arrivee>Brest</arrivee>
+</reservation>
+

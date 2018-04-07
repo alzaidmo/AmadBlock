@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<reservation>
+	<id>1</id>
+	<nom>Un Beau Nom</nom>
+	<prenom>Un Beau Prenom</prenom>
+	<telephone>0669696969</telephone>
+	<compagnie>Ma Belle Compagnie</compagnie>
+	<depart>Mon Beau Point de Départ</depart>
+	<arrivee>Mon Beau Point d'Arrivee</arrivee>
+</reservation>
+

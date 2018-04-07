@@ -23,7 +23,7 @@ class NodeHandler(threading.Thread):
 		Req = bytes.decode(self.sock.recv(self.buffSize))
 
 		if ((self.addr[0] not in self.node.hosts) & (Req != "NEW")):
-			print("["+GRN+"Handler"+RST+"] Unkown host attempting to connect - Refusing\n")
+			print("["+GRN+"Handler"+RST+"] Unknown host attempting to connect - Refusing\n")
 			self.sock.send(b'0')  #Refusing unknown hosts
 
 		else:

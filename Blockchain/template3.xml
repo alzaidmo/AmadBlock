@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<reservation>
+	<id>3</id>
+	<nom>Gohep</nom>
+	<prenom>Joseline</prenom>
+	<telephone>0669696969</telephone>
+	<compagnie>AFKLM</compagnie>
+	<depart>Paris</depart>
+	<arrivee>Brest</arrivee>
+</reservation>
+
