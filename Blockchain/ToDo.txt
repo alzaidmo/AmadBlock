@@ -2,6 +2,3 @@
 
 1. Perte de transactions lors des minages avortés
 2. Scenario d'attaque
-3. Blockchain stockée dans un fichier
-4. Sending from XML2Python
-
