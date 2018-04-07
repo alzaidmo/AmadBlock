@@ -20,7 +20,6 @@ class Consenter(object):
 			replaced = self.resolveConflicts()
 
 			if replaced:
-			
 				Consenter.log("Blockchain was replaced")
 				pass
 				#Our chain was replaced
@@ -28,6 +27,7 @@ class Consenter(object):
 				Consenter.log("Blockchain is authoritative")
 				pass
 				#Our chain is authoritative
+			self.node.saveBC()
 			self.running = False
 			for block in self.node.blockchain:
 				self.log("Current Blockchain {}", block)

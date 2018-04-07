@@ -3,7 +3,7 @@
 import Node
 import PNR
 
-nodes = ["172.20.15.83", "172.20.15.42"] #IPs of the nodes to which requests should be sent  
+nodes = ["localhost"] #IPs of the nodes to which requests should be sent  
 
 if __name__ == "__main__":
 	
