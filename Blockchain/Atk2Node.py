@@ -5,7 +5,7 @@ import time
 import Block
 
 sender_IP = "127.0.0.1" #IP of the web server from which requests are emanating
-#node_IP = "172.20.15.83" #IP of established node
+node_IP = "192.168.11.23" #IP of established node
 
 if __name__ == "__main__":
 	

@@ -3,7 +3,7 @@ import PNR
 import Client
 
 WebSender = Client.Client("convertisseur") 
-hosts = set(["localhost"])
+hosts = set(["127.0.0.1", "192.168.11.23"])
 
 def converter(fichier,hosts):
 	f = fichier
