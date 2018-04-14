@@ -24,15 +24,18 @@ class Miner(threading.Thread):
 	def createBlock(self):
 		'''Initialises a new block and starts the proof of work'''
 
-		transactionCount = len(self.node.mempool)
+		transactionCount = len(self.node.mempool) # transactions to process
 		data = []
 
 		if transactionCount != 0:
 			Miner.log("{} transaction(s) in the mempool", transactionCount)
-			for transaction in self.node.mempool:
-				data.append(transaction.raw_data())
-			self.node.mempool = set([])
-			Miner.log("Flushed mempool !\n")
+			for i in range(transactionCount):
+				data.append(self.node.mempool[i].raw_data())
+
+			# deleting what was processed from the mempool => keeping what was received for the next session
+			self.node.mempool = self.node.mempool[transactionCount:]
+
+			Miner.log("{} transaction(s) received for the next mining ", len(self.node.mempool))
 
 			lastBlock = self.node.blockchain[-1]
 

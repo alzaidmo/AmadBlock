@@ -21,12 +21,11 @@ class Consenter(object):
 
 			if replaced:
 				Consenter.log("Blockchain was replaced")
-				pass
-				#Our chain was replaced
+				# Clean mempool in case of transaction redundancy
+				self.updateMempool()
 			else:
 				Consenter.log("Blockchain is authoritative")
-				pass
-				#Our chain is authoritative
+
 			self.node.saveBC()
 			self.running = False
 			for block in self.node.blockchain:
@@ -115,7 +114,28 @@ class Consenter(object):
 			return False
 
 		return True
-		
+
+	def updateMempool(self):
+		"""
+		Cleans mempool from transactions that also appear in the blockchain that was received from other miners
+		"""
+		for block in self.node.blockchain:
+			for blockTransaction in block.getData():
+				for memTransaction in self.node.mempool:
+					if self.computeHash(memTransaction.raw_data()) == self.computeHash(blockTransaction):
+						self.node.mempool.remove(memTransaction)
+						break
+
+
+	def computeHash(self,data):
+		"""
+		Computes an md5 hash for the data
+		:data : data to compute the md5 hash for
+		:return : the md5 hash
+		"""
+		h = hashlib.md5()
+		h.update(data)
+		return h.hexdigest()
 
 	@staticmethod
 	def log(msg, *params):
