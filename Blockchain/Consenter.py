@@ -21,11 +21,11 @@ class Consenter(object):
 
 			if replaced:
 				Consenter.log("Blockchain was replaced")
-				# Clean mempool in case of transaction redundancy
-				self.updateMempool()
 			else:
 				Consenter.log("Blockchain is authoritative")
-
+				
+			#Clean mempool from processed transactions or in case of transaction redundancy 
+			self.updateMempool()
 			self.node.saveBC()
 			self.running = False
 			for block in self.node.blockchain:
