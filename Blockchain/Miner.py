@@ -33,7 +33,7 @@ class Miner(threading.Thread):
 				data.append(self.node.mempool[i].raw_data())
 
 			# deleting what was processed from the mempool => keeping what was received for the next session
-			self.node.mempool = self.node.mempool[transactionCount:]
+			# self.node.mempool = self.node.mempool[transactionCount:]
 
 			Miner.log("{} transaction(s) received for the next mining ", len(self.node.mempool))
 
